@@ -123,8 +123,8 @@ git commit -m "feat: initial commit of modular YOLO26 phytoplankton detection pi
 # 4. Ganti nama branch utama menjadi main
 git branch -M main
 
-# 5. Tambahkan remote repository GitHub Anda (ganti URL di bawah)
-git remote add origin https://github.com/USERNAME/phytoplankton_detection.git
+# 5. Tambahkan remote repository GitHub Anda
+git remote add origin https://github.com/mahruzaley-pixel/phytoplankton_detection.git
 
 # 6. Push ke GitHub
 git push -u origin main
@@ -158,7 +158,7 @@ Anda dapat mengimpor file [kaggle_training_runner.ipynb](file:///d:/phytoplankto
 !pip install -q --upgrade ultralytics
 
 # 2. Clone repository GitHub Anda
-!git clone https://github.com/USERNAME/phytoplankton_detection.git /kaggle/working/phytoplankton_detection
+!git clone https://github.com/mahruzaley-pixel/phytoplankton_detection.git /kaggle/working/phytoplankton_detection
 %cd /kaggle/working/phytoplankton_detection
 
 # 3. Konversi Dataset dari /kaggle/input ke format YOLO

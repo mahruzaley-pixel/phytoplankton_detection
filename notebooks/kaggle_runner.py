@@ -3,7 +3,7 @@ Universal Phytoplankton YOLO26 Pipeline Runner (Kaggle & Local Hybrid)
 =======================================================================
 Script ini dapat dijalankan baik di Kaggle GPU maupun di komputer lokal (CPU/GPU):
   1. Di Kaggle (Full Training 100 Epochs):
-     python notebooks/kaggle_runner.py --repo_url https://github.com/USERNAME/phytoplankton_detection.git
+     python notebooks/kaggle_runner.py --repo_url https://github.com/mahruzaley-pixel/phytoplankton_detection.git
 
   2. Di Lokal (Local Debugging / Fast Test):
      python notebooks/kaggle_runner.py --debug
@@ -84,7 +84,7 @@ def package_results(output_zip: Path, result_dir: Path, extra_files: list):
 
 def main():
     parser = argparse.ArgumentParser(description="Universal YOLO26 Phytoplankton Pipeline Runner.")
-    parser.add_argument("--repo_url", type=str, default="", help="GitHub repository URL to clone (khusus di Kaggle).")
+    parser.add_argument("--repo_url", type=str, default="https://github.com/mahruzaley-pixel/phytoplankton_detection.git", help="GitHub repository URL to clone (khusus di Kaggle).")
     parser.add_argument("--debug", action="store_true", help="Mode debug lokal (sedikit sampel & epoch singkat).")
     parser.add_argument("--epochs", type=int, default=100, help="Jumlah epoch training (default: 100).")
     parser.add_argument("--model", type=str, default="yolo26s.pt", help="Varian model YOLO26 (default: yolo26s.pt).")
