@@ -28,6 +28,17 @@ echo.
 echo [+] Inisialisasi Git repository...
 "!GIT_CMD!" init
 
+:: Cek apakah identitas Git sudah diset
+"!GIT_CMD!" config user.name >nul 2>nul
+if %errorlevel% neq 0 (
+    echo.
+    echo [!] Identitas Git belum diset di komputer ini.
+    set /p GIT_USER="Masukkan Nama Anda untuk Git (contoh: John Doe): "
+    set /p GIT_EMAIL="Masukkan Email Anda untuk Git (contoh: john@example.com): "
+    if not "!GIT_USER!"=="" "!GIT_CMD!" config user.name "!GIT_USER!"
+    if not "!GIT_EMAIL!"=="" "!GIT_CMD!" config user.email "!GIT_EMAIL!"
+)
+
 echo.
 echo [+] Menambahkan file proyek (dataset dan runs diabaikan oleh .gitignore)...
 "!GIT_CMD!" add .

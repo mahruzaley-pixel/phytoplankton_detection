@@ -67,9 +67,12 @@ phytoplankton_detection/
 │       ├── helpers.py              # Helper YAML, logging, dan deteksi device
 │       └── visualizer.py           # Render anotasi & bounding box berwarna
 ├── notebooks/
-│   ├── kaggle_training_runner.ipynb # Jupyter Notebook siap pakai untuk Kaggle
+│   ├── kaggle_training_runner.ipynb # Hybrid Jupyter Notebook (Kaggle GPU & Local Debug)
+│   └── kaggle_runner.py            # Hybrid Python runner script (Kaggle & Local)
 ├── scripts/
-│   └── filter_dataset.py       # Filter dataset berdasarkan kelas tertentu ke sub_dataset/
+│   ├── filter_dataset.py       # Filter dataset VOC per kelas ke sub_dataset/
+│   ├── package_for_kaggle.py   # Paketkan sub_dataset ke file ZIP siap upload Kaggle
+│   └── setup_git.bat           # Setup Git otomatis & push ke GitHub
 └── tests/
     └── test_pipeline.py            # Unit test pipeline otomatis
 ```
@@ -134,17 +137,18 @@ git push -u origin main
 Pelatihan penuh 11.000+ gambar paling optimal dijalankan di GPU Kaggle (NVIDIA T4 x2 atau P100 gratis).
 
 ### Langkah 1: Unggah Dataset ke Kaggle
-1. Buka [Kaggle Datasets](https://www.kaggle.com/datasets) -> Klik **New Dataset**.
-2. Beri nama dataset (misal: `phytoplankton-voc-dataset`).
-3. Upload folder `dataset/` Anda (atau compress menjadi file `.zip` lalu upload).
-4. Klik **Create**.
+1. File dataset 7 kelas siap upload sudah dibuat di: `sub_dataset_kaggle.zip` (667 MB).
+   *(Atau Anda bisa membuat ulang kapan saja dengan menjalankan `py scripts/package_for_kaggle.py`)*
+2. Buka [Kaggle Datasets](https://www.kaggle.com/datasets) -> Klik **New Dataset**.
+3. Beri nama dataset (misal: `phytoplankton-7classes-dataset`).
+4. Drag & drop file `sub_dataset_kaggle.zip` lalu klik **Create**.
 
 ### Langkah 2: Buat Notebook Baru di Kaggle
 1. Buka [Kaggle Code](https://www.kaggle.com/code) -> Klik **New Notebook**.
 2. Pada panel kanan (**Notebook Settings**):
    - **Accelerator**: Pilih **GPU T4 x2** atau **GPU P100**.
    - **Internet**: Pastikan **Internet ON**.
-3. Klik **+ Add Input** di kanan atas -> Pilih dataset fitoplankton yang Anda unggah di Langkah 1.
+3. Klik **+ Add Input** di kanan atas -> Pilih dataset `phytoplankton-7classes-dataset` yang Anda unggah.
 
 ### Langkah 3: Gunakan Notebook Runner
 Anda dapat mengimpor file [kaggle_training_runner.ipynb](file:///d:/phytoplankton_detection/notebooks/kaggle_training_runner.ipynb) ke Kaggle (*File -> Upload Notebook*), atau membuat cell dengan urutan berikut:
