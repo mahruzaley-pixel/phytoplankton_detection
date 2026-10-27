@@ -1,0 +1,28 @@
+# Phytoplankton Dataset - 24 Classes Definition
+nc: 24
+
+names:
+  0: "bacteriastrum"
+  1: "biddulphia"
+  2: "ceratium carriense"
+  3: "ceratium furca"
+  4: "ceratium fusus"
+  5: "ceratium trichoceros"
+  6: "ceratium tripos"
+  7: "chaetoceros"
+  8: "corethron"
+  9: "coscinodiscus"
+  10: "coscinodiscus flank"
+  11: "detonula pumila"
+  12: "dinophysis caudata"
+  13: "ditylum"
+  14: "eucampia"
+  15: "guinardia flaccida"
+  16: "helicotheca"
+  17: "navicula"
+  18: "pleurosigma pelagicum"
+  19: "protoperidinium"
+  20: "rhizosolenia"
+  21: "skeletonema"
+  22: "thalassionema frauenfeldii"
+  23: "thalassionema nitzschioides"

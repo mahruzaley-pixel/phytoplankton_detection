@@ -1,0 +1,40 @@
+# Configuration for Full Training on Kaggle GPU
+task: detect
+mode: train
+model: yolo26s.pt      # Recommended options: yolo26n.pt, yolo26s.pt, yolo26m.pt
+data: data/yolo/data.yaml
+
+# Training Parameters
+epochs: 100
+batch: 16
+imgsz: 800             # Phytoplankton images have high resolution (1360x1024+)
+device: 0              # GPU device ID, or '0,1' for multi-GPU
+workers: 4
+patience: 20           # Early stopping patience
+save_period: 10        # Save checkpoint every N epochs
+
+# Optimizer & Learning Rate
+optimizer: auto        # 'auto' or 'MuSGD' (YOLO26 specialized optimizer)
+lr0: 0.01
+lrf: 0.01
+momentum: 0.937
+weight_decay: 0.0005
+warmup_epochs: 3.0
+warmup_momentum: 0.8
+
+# Augmentation (suited for microscopic plankton)
+degrees: 15.0          # Random rotation (plankton organisms have arbitrary orientation)
+translate: 0.1
+scale: 0.5
+flipud: 0.5            # Vertical flip is valid for microscopy
+fliplr: 0.5            # Horizontal flip
+mosaic: 1.0            # High value for varied contexts
+mixup: 0.15
+
+# Project & Logging
+project: runs/train
+name: yolo26_phytoplankton_full
+exist_ok: true
+pretrained: true
+verbose: true
+plots: true

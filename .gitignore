@@ -1,0 +1,67 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Datasets and generated YOLO data (DO NOT PUSH LARGE DATASETS TO GITHUB)
+dataset/
+sub_dataset/
+data/
+yolo_dataset/
+*.zip
+*.tar.gz
+
+# Pretrained and trained model checkpoints
+*.pt
+*.pth
+*.onnx
+*.engine
+
+# Ultralytics & Experiment runs
+runs/
+wandb/
+mlruns/
+*.log
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+*-checkpoint.ipynb
+
+# IDE configs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db

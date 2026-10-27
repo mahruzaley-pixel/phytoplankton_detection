@@ -1,0 +1,22 @@
+# Configuration for Fast Local Testing (CPU / Low GPU)
+task: detect
+mode: train
+model: yolo26n.pt      # Lightweight nano model
+data: data/yolo_mini/data.yaml
+
+# Training Parameters (Fast verification)
+epochs: 2
+batch: 4
+imgsz: 416
+device: cpu            # 'cpu' or 0 (will auto-detect GPU if available)
+workers: 0             # 0 avoids Windows multiprocessing issues
+patience: 5
+save_period: -1
+
+# Project & Logging
+project: runs/train
+name: yolo26_local_test
+exist_ok: true
+pretrained: true
+verbose: true
+plots: false

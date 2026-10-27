@@ -1,0 +1,917 @@
+\documentclass[aspectratio=169, 10pt]{beamer}
+
+% ==============================================================================
+% PENGATURAN MODE CATATAN PRESENTER (SPEAKER NOTES) UNTUK OVERLEAF
+% ==============================================================================
+% Pilihan Tampilan:
+% 1. \setbeameroption{hide notes}                    % Hanya slide (untuk presentasi resmi ke promotor)
+% 2. \setbeameroption{show notes on second screen=right} % Slide di kiri, catatan di kanan (gladi bersih/dual screen)
+% 3. \setbeameroption{show only notes}               % Hanya lembar catatan (bisa dicetak sebagai contekan)
+\setbeameroption{hide notes}
+
+% ==============================================================================
+% PAKET-PAKET STANDAR OVERLEAF (TEX LIVE)
+% ==============================================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multicol}
+\usepackage{microtype}
+
+% Paket TikZ untuk Flowchart & Diagram Vektor
+\usepackage{tikz}
+\usetikzlibrary{
+    calc,
+    positioning,
+    shapes.geometric,
+    shapes.symbols,
+    shapes.misc,
+    arrows.meta,
+    shadows,
+    backgrounds,
+    fit,
+    matrix,
+    decorations.pathreplacing
+}
+
+% Paket Tcolorbox untuk Box Penjelasan Bergaya Modern
+\usepackage[skins]{tcolorbox}
+
+% ==============================================================================
+% PALET WARNA KHUSUS: OCEANIC & MARINE BIOLOGY THEME
+% ==============================================================================
+\definecolor{OceanDeep}{HTML}{0A2540}       % Biru Samudra Dalam (Primary Header)
+\definecolor{OceanTeal}{HTML}{0D6E6E}       % Hijau Teal Laut (Secondary Accents)
+\definecolor{CyanHighlight}{HTML}{00A896}   % Sian Terang (Fokus & Highlighting)
+\definecolor{CoralAccent}{HTML}{E76F51}     % Oranye Karang (Peringatan & Evaluasi Kritis)
+\definecolor{AmberWarn}{HTML}{F4A261}       % Kuning Amber (Tantangan Biologis)
+\definecolor{DiatomGold}{HTML}{D4A373}      % Emas Silika Frustule
+\definecolor{AlgaeGreen}{HTML}{2A9D8F}      % Hijau Fitoplankton
+\definecolor{CardBg}{HTML}{F8FAFC}          % Abu-abu Putih Lembut (Background Card)
+\definecolor{CardBorder}{HTML}{CBD5E1}      % Border Halus
+\definecolor{DarkText}{HTML}{1E293B}        % Teks Gelap Kontras
+\definecolor{MutedText}{HTML}{64748B}       % Teks Abu Penjelas
+
+% ==============================================================================
+% PENGATURAN TEMA BEAMER
+% ==============================================================================
+\usetheme{default}
+\usecolortheme{default}
+
+\setbeamercolor{background canvas}{bg=white}
+\setbeamercolor{normal text}{fg=DarkText}
+\setbeamercolor{title}{fg=OceanDeep}
+\setbeamercolor{subtitle}{fg=OceanTeal}
+\setbeamercolor{frametitle}{fg=OceanDeep, bg=CardBg}
+\setbeamercolor{structure}{fg=OceanTeal}
+\setbeamercolor{item}{fg=CyanHighlight}
+
+% Desain Frame Title yang Bersih dan Elegan
+\setbeamertemplate{frametitle}{%
+    \begin{tcolorbox}[
+        enhanced,
+        colback=CardBg,
+        colframe=CardBorder,
+        boxrule=0.5pt,
+        arc=3pt,
+        left=8pt,
+        right=8pt,
+        top=4pt,
+        bottom=4pt,
+        boxsep=0pt,
+        width=\textwidth,
+        nobeforeafter
+    ]
+        {\usebeamerfont{frametitle}\textbf{\color{OceanDeep}\insertframetitle}}\par
+        \ifx\insertframesubtitle\@empty\else
+            {\usebeamerfont{framesubtitle}\color{OceanTeal}\insertframesubtitle}
+        \fi
+    \end{tcolorbox}
+    \vspace{2pt}
+}
+
+% Footline yang Rapi dan Informatif
+\setbeamertemplate{footline}{%
+    \leavevmode%
+    \hbox{%
+        \begin{beamercolorbox}[wd=.35\paperwidth,ht=2.5ex,dp=1ex,left,leftskip=1cm]{normal text}%
+            \usebeamerfont{date in head/foot}\color{MutedText}\scriptsize Riset Doktoral Biologi: Deteksi Fitoplankton
+        \end{beamercolorbox}%
+        \begin{beamercolorbox}[wd=.35\paperwidth,ht=2.5ex,dp=1ex,center]{normal text}%
+            \usebeamerfont{title in head/foot}\color{OceanTeal}\scriptsize Framework Komputasi YOLO
+        \end{beamercolorbox}%
+        \begin{beamercolorbox}[wd=.30\paperwidth,ht=2.5ex,dp=1ex,right,rightskip=1cm]{normal text}%
+            \usebeamerfont{date in head/foot}\color{MutedText}\scriptsize\insertframenumber{} / \inserttotalframenumber
+        \end{beamercolorbox}%
+    }%
+    \vspace{4pt}
+}
+\setbeamertemplate{navigation symbols}{}
+
+% ==============================================================================
+% STILISASI KOTAK TCOLORBOX
+% ==============================================================================
+\newtcolorbox{biocard}[2][]{
+    enhanced,
+    colback=CardBg,
+    colframe=OceanTeal,
+    coltitle=white,
+    title={\textbf{#2}},
+    fonttitle=\bfseries\small,
+    arc=4pt,
+    boxrule=0.8pt,
+    left=6pt, right=6pt, top=5pt, bottom=5pt,
+    drop shadow=black!10,
+    #1
+}
+
+\newtcolorbox{alertcard}[2][]{
+    enhanced,
+    colback=white,
+    colframe=CoralAccent,
+    coltitle=white,
+    title={\textbf{#2}},
+    fonttitle=\bfseries\small,
+    arc=4pt,
+    boxrule=0.8pt,
+    left=6pt, right=6pt, top=5pt, bottom=5pt,
+    drop shadow=CoralAccent!15,
+    #1
+}
+
+\newtcolorbox{conceptcard}[2][]{
+    enhanced,
+    colback=white,
+    colframe=OceanDeep,
+    coltitle=white,
+    title={\textbf{#2}},
+    fonttitle=\bfseries\small,
+    arc=4pt,
+    boxrule=0.8pt,
+    left=6pt, right=6pt, top=5pt, bottom=5pt,
+    drop shadow=OceanDeep!15,
+    #1
+}
+
+% ==============================================================================
+% DATA JUDUL PRESENTASI
+% ==============================================================================
+\title[Otomasi Deteksi Fitoplankton]{Kecerdasan Artifisial untuk Taksonomi Digital:\\Memahami Framework YOLO bagi Riset Biologi Laut}
+\subtitle{Catatan Konseptual \& Metodologis untuk Promotor \& Tim Penguji Biologi}
+\author[Peneliti Doktoral Biologi]{
+    \textbf{Kandidat Doktor Biologi}\\[1mm]
+    \small Laboratorium Ekologi \& Sistematika Tumbuhan Laut\\
+    \footnotesize Program Studi Doktor Ilmu Biologi
+}
+\institute{
+    \textbf{Fokus Kajian:} Otomasi Sensus \& Identifikasi 24 Taksa Fitoplankton\\
+    \textit{Pemanfaatan Computer Vision sebagai Akselerator Kuantifikasi Ekologi}
+}
+\date{\today}
+
+% ==============================================================================
+% AWAL DOKUMEN PRESENTASI
+% ==============================================================================
+\begin{document}
+
+% ------------------------------------------------------------------------------
+% SLIDE 1: COVER
+% ------------------------------------------------------------------------------
+\begin{frame}[plain]
+    \begin{tikzpicture}[remember picture, overlay]
+        % Background hiasan laut
+        \fill[OceanDeep] (current page.north west) rectangle ($(current page.north east)+(0,-3.2cm)$);
+        \fill[OceanTeal] ($(current page.north west)+(0,-3.2cm)$) rectangle ($(current page.north east)+(0,-3.35cm)$);
+        \fill[CyanHighlight] ($(current page.north west)+(0,-3.35cm)$) rectangle ($(current page.north east)+(0,-3.42cm)$);
+        
+        % Judul dalam banner biru
+        \node[anchor=south west, text width=14cm] at ($(current page.north west)+(1cm,-2.8cm)$) {
+            {\Large\bfseries\color{white} Kecerdasan Artifisial untuk Taksonomi Digital:\\[1mm]
+            \large Memahami Framework YOLO dalam Sensus Fitoplankton}\\[2mm]
+            {\footnotesize\color{CardBorder} Panduan Komprehensif Arsitektur, Logika Biologis, \& Validasi Metrik untuk Promotor Biologi}
+        };
+    \end{tikzpicture}
+    
+    \vspace{2.8cm}
+    \begin{columns}[T]
+        \begin{column}{0.58\textwidth}
+            \begin{biocard}{Konteks Riset Disertasi}
+                \scriptsize
+                \begin{itemize}\setlength\itemsep{2pt}
+                    \item \textbf{Objek}: 24 Taksa Fitoplankton Laut (Diatom \& Dinoflagellata).
+                    \item \textbf{Tantangan}: Keterbatasan mikroskopi manual (waktu, kelelahan, subjektivitas).
+                    \item \textbf{Solusi}: Framework \textbf{YOLO} (\textit{You Only Look Once}) sebagai instrumen sensus mikroskopik berkecepatan tinggi.
+                \end{itemize}
+            \end{biocard}
+        \end{column}
+        \begin{column}{0.38\textwidth}
+            \begin{conceptcard}{Tujuan Catatan Ini}
+                \scriptsize
+                Menjelaskan cara kerja YOLO \textbf{tanpa jargon TI yang rumit}, menggunakan analogi mikroskopi dan taksonomi yang lazim dipahami oleh biolog murni.
+            \end{conceptcard}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\note{
+    \textbf{[Catatan Pembuka untuk Disampaikan ke Promotor]}:
+    \begin{itemize}
+        \item "Selamat pagi/siang Prof dan Tim Promotor. Sebagai mahasiswa doktoral biologi, fokus utama saya tetap pada taksonomi, kelimpahan populasi, dan dinamika ekologis fitoplankton."
+        \item "Namun, untuk memproses ribuan sampel mikroskopis secara akurat dan representatif secara statistik, saya memerlukan instrumen otomasi. Framework yang saya gunakan adalah YOLO."
+        \item "Presentasi ini tidak bertujuan mengubah riset kita menjadi ilmu komputer, melainkan membongkar prinsip kerja YOLO agar Prof dan tim promotor yakin bahwa metode ini sahih, objektif, dan dapat dipertanggungjawabkan secara saintifik dalam biologi."
+    \end{itemize}
+}
+
+% ------------------------------------------------------------------------------
+% SLIDE 2: DAFTAR ISI LOGIS
+% ------------------------------------------------------------------------------
+\begin{frame}{Struktur Pembahasan}
+    \framesubtitle{Peta Konsep Diskusi Metodologi Komputasi dalam Biologi}
+    
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{biocard}{I. Fondasi Biologis \& Masalah Riil}
+                \scriptsize
+                \begin{enumerate}\setlength\itemsep{4pt}
+                    \item Hambatan Klasik Mikroskopi Manual (*Sedgwick-Rafter*).
+                    \item Mengapa Deteksi Objek, Bukan Sekadar Klasifikasi?
+                    \item Analogi Cara Kerja: Taksonom Senior vs. Novice.
+                \end{enumerate}
+            \end{biocard}
+            \vspace{3pt}
+            \begin{conceptcard}{II. Anatomi Framework YOLO}
+                \scriptsize
+                \begin{enumerate}\setcounter{enumi}{3}\setlength\itemsep{4pt}
+                    \item Tiga Organ Utama YOLO: *Backbone*, *Neck*, *Head*.
+                    \item Bagaimana Komputer "Melihat" Ciri Diagnostik (*Frustule*, *Setae*, *Horns*).
+                    \item Penanganan Skala: Dari Sel Mikro ($10\,\mu\text{m}$) ke Rantai Koloni.
+                \end{enumerate}
+            \end{conceptcard}
+        \end{column}
+        
+        \begin{column}{0.48\textwidth}
+            \begin{conceptcard}{III. Pembelajaran \& Kalibrasi Model}
+                \scriptsize
+                \begin{enumerate}\setcounter{enumi}{6}\setlength\itemsep{4pt}
+                    \item Proses *Training*: Analogi Bimbingan Kurator Herbarium.
+                    \item *Loss Function*: Mengukur Kesalahan Posisi \& Takson.
+                \end{enumerate}
+            \end{conceptcard}
+            \vspace{3pt}
+            \begin{alertcard}{IV. Validasi \& Relevansi Disertasi}
+                \scriptsize
+                \begin{enumerate}\setcounter{enumi}{8}\setlength\itemsep{4pt}
+                    \item Metrik Mutu dalam Bahasa Biologi (*Precision*, *Recall*, *mAP*).
+                    \item Menjawab Keraguan: Detritus, Sel Pecah, \& *Overlapping*.
+                    \item Kontribusi Doktoral: Sensus Ekologi Cepat \& Skala Besar.
+                \end{enumerate}
+            \end{alertcard}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\note{
+    \textbf{[Catatan Presenter - Alur Berpikir]}:
+    \begin{itemize}
+        \item Tegaskan kepada promotor bahwa presentasi dibagi menjadi 4 kuadran logis: masalah biologi $\to$ anatomi alat $\to$ cara kalibrasi $\to$ jaminan mutu data biologis.
+        \item Tunjukkan bahwa setiap langkah memiliki padanan langsung dalam metodologi biologi konvensional.
+    \end{itemize}
+}
+
+% ------------------------------------------------------------------------------
+% SLIDE 3: MASALAH RIIL MIKROSKOPI MANUAL
+% ------------------------------------------------------------------------------
+\begin{frame}{Masalah Klasik di Laboratorium Biologi}
+    \framesubtitle{Mengapa Sensus Manual Menjadi Titik Hambat (Bottleneck) Riset Ekologi?}
+    
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{alertcard}{Keterbatasan Sensus Mikroskopis Konvensional}
+                \scriptsize
+                Metode standar kamar hitung (*Sedgwick-Rafter*, *Hemocytometer*, atau bejana *Utermöhl*) menghadapi kendala intrinsik:
+                \begin{itemize}\setlength\itemsep{3pt}
+                    \item \textbf{Kelelahan Visual (*Eye Fatigue*)}: Konsentrasi analis menurun tajam setelah 30--45 menit menatap mikroskop.
+                    \item \textbf{Subjektivitas Antar-Analis}: Dua analis seringkali menghasilkan estimasi kelimpahan berbeda pada preparat yang sama.
+                    \item \textbf{Konsumsi Waktu Tinggi}: Menghitung 1 preparat lengkap membutuhkan waktu 1 hingga 2,5 jam.
+                    \item \textbf{Ukuran Sampel Terbatas}: Mustahil memproses ratusan stasiun sampling oseanografi secara berkala dengan tenaga manusia murni.
+                \end{itemize}
+            \end{alertcard}
+        \end{column}
+        
+        \begin{column}{0.48\textwidth}
+            \begin{biocard}{Dampak Ekologis jika Sampel Terbatas}
+                \scriptsize
+                \begin{itemize}\setlength\itemsep{4pt}
+                    \item \textbf{Resolusi Spasio-Temporal Rendah}: Kejadian ledakan alga berbahaya (*Harmful Algal Blooms* / HABs) sering terlambat terdeteksi.
+                    \item \textbf{Keluaran Data Statistik Lemah}: Jumlah ulangan (*replicates*) terbatas, mengurangi kekuatan uji korelasi lingkungan (suhu, salinitas, nutrien N/P).
+                \end{itemize}
+                \tcblower
+                \textbf{\color{OceanDeep}Solusi yang Diharapkan:}\\
+                Bukan menggantikan taksonom, melainkan memiliki \textbf{"Mikroskop Cerdas"} yang mengidentifikasi dan mencacah ribuan sel secara konsisten dalam hitungan detik.
+            \end{biocard}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\note{
+    \textbf{[Catatan Presenter - Poin Penekanan]}:
+    \begin{itemize}
+        \item Hubungkan langsung dengan pengalaman promotor di laboratorium. Tanyakan/ingatkan: "Prof pasti memahami betapa lelahnya mahasiswa atau asisten saat harus mencacah 50 sampel air dari ekspedisi laut menggunakan kamar hitung Sedgwick-Rafter."
+        \item "Teknologi ini hadir bukan untuk menghilangkan peran mata ahli taksonomi, melainkan untuk melipatgandakan kapasitas kerja kita hingga ratusan kali lipat."
+    \end{itemize}
+}
+
+% ------------------------------------------------------------------------------
+% SLIDE 4: KLASIFIKASI VS DETEKSI OBJEK
+% ------------------------------------------------------------------------------
+\begin{frame}{Klasifikasi Citra vs. Deteksi Objek}
+    \framesubtitle{Mengapa Biologi Memerlukan Object Detection (Bukan Sekadar AI Biasa)?}
+    
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{conceptcard}{Level 1: Klasifikasi Citra (Sederhana)}
+                \scriptsize
+                \textbf{Pertanyaan AI}: \textit{"Apakah di dalam foto ini ada fitoplankton?"}\\
+                \textbf{Output}: 1 Label global untuk seluruh foto (misal: "*Chaetoceros*").\\[3pt]
+                \color{CoralAccent}\textbf{Kelemahan Fatal untuk Biologi}:
+                \begin{itemize}\setlength\itemsep{2pt}
+                    \item Gagal jika dalam 1 lapang pandang terdapat \textbf{banyak spesies sekaligus} (komunitas polikultur).
+                    \item Tidak tahu \textbf{di mana} sel berada.
+                    \item \textbf{Tidak bisa menghitung kelimpahan/densitas} (hanya tahu ada/tidak ada, bukan berapa banyak sel/L).
+                \end{itemize}
+            \end{conceptcard}
+        \end{column}
+        
+        \begin{column}{0.48\textwidth}
+            \begin{biocard}{Level 2: Deteksi Objek (YOLO - Yang Kita Pakai)}
+                \scriptsize
+                \textbf{Pertanyaan AI}: \textit{"Di mana setiap sel berada, apa nama taksonnya, dan berapa total populasinya?"}\\
+                \textbf{Output}: Kotak pembatas (*Bounding Box*) + Nama Takson + Tingkat Keyakinan (*Confidence Score*).\\[3pt]
+                \color{AlgaeGreen}\textbf{Keunggulan Mutlak untuk Riset Ekologi}:
+                \begin{itemize}\setlength\itemsep{2pt}
+                    \item Mengisolasi \textbf{setiap individu sel} secara independen.
+                    \item Menangani \textbf{multispesies} dalam satu lapang pandang.
+                    \item Menghasilkan data \textbf{sensus cacah mutlak} untuk indeks keanekaragaman ($H'$), kemerataan ($E$), dan dominansi ($D$).
+                \end{itemize}
+            \end{biocard}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\note{
+    \textbf{[Catatan Presenter - Penjelasan Perbedaan]}:
+    \begin{itemize}
+        \item "Prof, software AI di pasaran seringkali hanya melakukan klasifikasi. Jika kita beri foto satu tetes air laut yang berisi 5 sel Chaetoceros dan 2 sel Coscinodiscus, klasifikasi biasa akan bingung atau hanya menyebut salah satu."
+        \item "YOLO melakukan deteksi objek. Ia menggambar kotak terpisah pada masing-masing sel, mengenali spesiesnya satu per satu, dan langsung menghitung frekuensinya. Inilah yang kita perlukan untuk analisis ekologi kuantitatif."
+    \end{itemize}
+}
+
+% ------------------------------------------------------------------------------
+% SLIDE 5: APA ITU YOLO? ANALOGI BIOLOGIS
+% ------------------------------------------------------------------------------
+\begin{frame}{Apa Sebenarnya "YOLO" (You Only Look Once)?}
+    \framesubtitle{Analogi Biologis: Melayangkan Pandangan Sekilas vs. Meneliti Parsial}
+    
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{conceptcard}{Metode Lama (Two-Stage / Sliding Window)}
+                \scriptsize
+                \textbf{Ibarat: Asisten Pemula dengan Loupe Kaca}
+                \begin{enumerate}\setlength\itemsep{3pt}
+                    \item Menggeser kaca pembesar sedikit demi sedikit ke seluruh preparat (*crooping* ribuan kotak kecil).
+                    \item Memeriksa setiap potongan: *"Apakah ini sel? Jika ya, apa spesiesnya?"*
+                    \item Sangat lambat (butuh hitungan menit per foto), boros komputasi, dan sering kehilangan konteks utuh koloni alga yang memanjang.
+                \end{enumerate}
+            \end{conceptcard}
+        \end{column}
+        
+        \begin{column}{0.48\textwidth}
+            \begin{biocard}{Metode YOLO (One-Stage Single Pass)}
+                \scriptsize
+                \textbf{Ibarat: Taksonom Berpengalaman}
+                \begin{enumerate}\setlength\itemsep{3pt}
+                    \item Sekali melayangkan pandangan (*Single Glance*) ke seluruh lapang pandang mikroskop secara holistik.
+                    \item Otak visualnya \textbf{langsung memproses koordinat dan identitas semua sel secara simultan}.
+                    \item Super cepat ($<0.02$ detik per frame foto beresolusi tinggi), mampu memahami struktur global sel panjang tanpa terpotong.
+                \end{enumerate}
+            \end{biocard}
+        \end{column}
+    \end{columns}
+    
+    \vspace{4pt}
+    \begin{tcolorbox}[colback=CardBg, colframe=OceanTeal, arc=3pt, boxrule=0.5pt, left=6pt, right=6pt, top=3pt, bottom=3pt]
+        \scriptsize\textbf{\color{OceanDeep}Kesimpulan Sederhana:} *"You Only Look Once"* artinya jaringan saraf tiruan hanya perlu memeriksa matriks citra utuh \textbf{satu kali saja} untuk menentukan posisi dan nama semua sel fitoplankton di layar.
+    \end{tcolorbox}
+\end{frame}
+
+\note{
+    \textbf{[Catatan Presenter - Analogi Kuat]}:
+    \begin{itemize}
+        \item "Singkatan YOLO adalah 'You Only Look Once' (Anda Hanya Perlu Melihat Sekali)."
+        \item "Mengapa diberi nama itu? Karena pendahulunya di dunia komputer bekerja dengan cara memotong-motong gambar menjadi ribuan sub-bagian lalu mengeceknya satu-satu. Itu seperti kita melihat preparat melalui sedotan sempit secara berulang-ulang."
+        \item "YOLO memproses seluruh lapang pandang sekaligus dalam satu sapuan kalkulasi matematis. Itulah alasan mengapa ia bisa berjalan secara real-time langsung di kamera mikroskop."
+    \end{itemize}
+}
+
+% ------------------------------------------------------------------------------
+% SLIDE 6: FLOWCHART 1 - ALUR PENELITIAN DOKTORAL (TIKZ)
+% ------------------------------------------------------------------------------
+\begin{frame}{Alur Kerja Penelitian Terintegrasi}
+    \framesubtitle{Dari Pengambilan Sampel Air Laut hingga Analisis Komunitas Ekologi}
+    
+    \centering
+    \begin{tikzpicture}[
+        node distance=0.85cm and 0.4cm,
+        every node/.style={font=\tiny},
+        biobox/.style={rectangle, rounded corners=3pt, draw=OceanDeep, fill=CardBg, thick, text width=2.0cm, align=center, minimum height=1.1cm, drop shadow},
+        aiprocess/.style={rectangle, rounded corners=3pt, draw=OceanTeal, fill=CyanHighlight!15, thick, text width=2.0cm, align=center, minimum height=1.1cm, drop shadow},
+        databox/.style={rectangle, rounded corners=3pt, draw=CoralAccent, fill=CoralAccent!10, thick, text width=2.0cm, align=center, minimum height=1.1cm, drop shadow},
+        arrow/.style={-Stealth[length=2.5mm, width=1.5mm], thick, OceanDeep}
+    ]
+        % Baris 1: Pra-Komputasi (Biologi Murni)
+        \node[biobox] (step1) {\textbf{1. Sampling Laut}\\Botol Nansen / Jaring Plankton ($20\,\mu\text{m}$)};
+        \node[biobox, right=of step1] (step2) {\textbf{2. Fiksasi Spesimen}\\Larutan Lugol 1\% / Formalin 2\%};
+        \node[biobox, right=of step2] (step3) {\textbf{3. Mikrofotografi}\\Mikroskop Cahaya \& Kamera Digital};
+        \node[biobox, right=of step3] (step4) {\textbf{4. Kurasi Anotasi}\\Ground Truth Manual oleh Biolog};
+        
+        % Baris 2: Komputasi AI (YOLO Framework)
+        \node[aiprocess, below=of step4] (step5) {\textbf{5. Pelatihan YOLO}\\Optimasi Fitur Morfologi 24 Taksa};
+        \node[aiprocess, left=of step5] (step6) {\textbf{6. Deteksi Otomatis}\\Lokasi Kotak \& Probabilitas Takson};
+        \node[aiprocess, left=of step6] (step7) {\textbf{7. Validasi Metrik}\\Evaluasi Precision, Recall, mAP};
+        \node[databox, left=of step7] (step8) {\textbf{8. Data Ekologi}\\Kelimpahan (sel/L), Indeks $H'$, HABs Alert};
+        
+        % Koneksi Panah
+        \draw[arrow] (step1) -- (step2);
+        \draw[arrow] (step2) -- (step3);
+        \draw[arrow] (step3) -- (step4);
+        \draw[arrow] (step4) -- (step5);
+        \draw[arrow] (step5) -- (step6);
+        \draw[arrow] (step6) -- (step7);
+        \draw[arrow] (step7) -- (step8);
+    \end{tikzpicture}
+    
+    \vspace{2pt}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \scriptsize\textbf{\color{OceanDeep}Peran Tim Biologi (Hulu):}\\
+            Memastikan validitas taksonomi sampel referensi (*Ground Truth*). Kualitas output AI 100\% bergantung pada ketelitian anotasi biologis.
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \scriptsize\textbf{\color{AlgaeGreen}Keluaran Ekologi (Hilir):}\\
+            Sensus kelimpahan sel instan yang siap dihubungkan dengan parameter oseanografi (nitrat, fosfat, klorofil-a, suhu muka laut).
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\note{
+    \textbf{[Catatan Presenter - Menjelaskan Posisi Komputasi]}:
+    \begin{itemize}
+        \item "Prof, perhatikan diagram ini. Kotak nomor 1 sampai 4 adalah murni pekerjaan basah biologi laut yang kita kuasai: sampling, fiksasi, mikroskopi, dan verifikasi taksonomi."
+        \item "YOLO hanya menempati kotak nomor 5 dan 6. Posisi AI ini sama seperti instrumen spektrofotometer atau PCR: sebuah mesin penganalisis data."
+        \item "Keluaran akhirnya (kotak 8) kembali 100\% menjadi domain biologi, yaitu kelimpahan sel per liter, struktur komunitas fitoplankton, dan peringatan ledakan alga beracun."
+    \end{itemize}
+}
+
+% ------------------------------------------------------------------------------
+% SLIDE 7: BAGAIMANA KOMPUTER MELIHAT SEL FITOPLANKTON?
+% ------------------------------------------------------------------------------
+\begin{frame}{Bagaimana Komputer Membaca Citra Mikroskop?}
+    \framesubtitle{Transformasi dari Cahaya Mikroskop Menjadi Matriks Numerik}
+    
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{conceptcard}{Pandangan Mata Manusia vs. Komputer}
+                \scriptsize
+                \begin{itemize}\setlength\itemsep{4pt}
+                    \item \textbf{Mata Biolog}: Melihat siluet sel, kloroplas cokelat/emas, duri (*setae*) silika, atau alur celah (*raphe*).
+                    \item \textbf{Sensor Kamera Digital}: Menangkap foton cahaya dan mengubahnya menjadi kisi-kisi angka (\textbf{Piksel}).
+                    \item \textbf{Matriks Piksel RGB}: Setiap citra berukuran $1024 \times 1024$ sebenarnya adalah tabel berisi 1 juta titik angka intensitas cahaya ($0$ hitam pekat hingga $255$ putih terang).
+                \end{itemize}
+            \end{conceptcard}
+        \end{column}
+        
+        \begin{column}{0.48\textwidth}
+            \begin{biocard}{Apa yang Dicari Algoritma?}
+                \scriptsize
+                Algoritma tidak "berpikir mistis", melainkan mendeteksi \textbf{perubahan kontras matematis}:
+                \begin{itemize}\setlength\itemsep{3pt}
+                    \item \textbf{Gradien Tepi}: Perbedaan mendadak antara sitoplasma sel yang gelap dengan latar belakang air/kaca preparat yang terang.
+                    \item \textbf{Pola Tekstur}: Pengulangan lubang-lubang areolae silika pada dinding katup diatom (*valve*).
+                    \item \textbf{Simetri Geometris}: Lingkaran simetris radial (*Coscinodiscus*) vs. bentuk kapal bilateral simetris (*Navicula*).
+                \end{itemize}
+            \end{biocard}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\note{
+    \textbf{[Catatan Presenter - Demistifikasi AI]}:
+    \begin{itemize}
+        \item "Seringkali muncul kesan bahwa AI memiliki intuisi misterius. Faktanya tidak demikian."
+        \item "Bagi komputer, foto mikroskop kita hanyalah lembaran angka koordinat dan intensitas cahaya. Ketika ada batas tajam antara dinding silika frustule dengan latar cairan, komputer mencatatnya sebagai lonjakan angka matematis (gradien kontras)."
+        \item "YOLO mengelompokkan pola-pola kontras ini untuk mengenali bentuk khas masing-masing fitoplankton."
+    \end{itemize}
+}
+
+% ------------------------------------------------------------------------------
+% SLIDE 8: ANATOMI ARSITEKTUR YOLO (3 ORGAN UTAMA)
+% ------------------------------------------------------------------------------
+\begin{frame}{Tiga Organ Utama Arsitektur YOLO}
+    \framesubtitle{Mekanisme Sensorik, Integrasi Saraf, dan Pusat Keputusan}
+    
+    \begin{columns}[T]
+        \begin{column}{0.32\textwidth}
+            \begin{conceptcard}{1. Backbone (Sistem Sensorik)}
+                \scriptsize
+                \textbf{Fungsi}: Mengekstrak ciri morfologi fisik.
+                \begin{itemize}\setlength\itemsep{2pt}
+                    \item Layer awal: Menemukan garis tepi frustule dan duri.
+                    \item Layer tengah: Menemukan pola ornamen silika & lekukan.
+                    \item Layer akhir: Merangkum bentuk morfologis utuh sel.
+                \end{itemize}
+            \end{conceptcard}
+        \end{column}
+        
+        \begin{column}{0.32\textwidth}
+            \begin{biocard}{2. Neck (Pusat Integrasi Skala)}
+                \scriptsize
+                \textbf{Fungsi}: Menggabungkan detail mikro & makro (*FPN*).
+                \begin{itemize}\setlength\itemsep{2pt}
+                    \item Sel diatom kecil ($10\,\mu\text{m}$) butuh resolusi detail piksel tinggi.
+                    \item Koloni memanjang atau tanduk *Ceratium* ($>300\,\mu\text{m}$) butuh bidang pandang luas.
+                    \item Mengawinkan kedua skala agar tak ada yang luput.
+                \end{itemize}
+            \end{biocard}
+        \end{column}
+        
+        \begin{column}{0.32\textwidth}
+            \begin{alertcard}{3. Head (Pengambil Keputusan)}
+                \scriptsize
+                \textbf{Fungsi}: Menghasilkan prediksi akhir:
+                \begin{itemize}\setlength\itemsep{2pt}
+                    \item \textbf{Lokasi}: Koordinat $[x, y, w, h]$ kotak sel.
+                    \item \textbf{Takson}: Peluang identitas dari 24 kelas fitoplankton.
+                    \item \textbf{Confidence}: Derajat kepastian model ($0.0 - 1.0$).
+                \end{itemize}
+            \end{alertcard}
+        \end{column}
+    \end{columns}
+    
+    \vspace{4pt}
+    \centering
+    \scriptsize\color{OceanDeep}\textbf{Analogi Tubuh Manusia:} *Backbone* adalah Retina Mata $\longrightarrow$ *Neck* adalah Saraf Optik \& Korteks Visual $\longrightarrow$ *Head* adalah Keputusan Verbal Taksonom.
+\end{frame}
+
+\note{
+    \textbf{[Catatan Presenter - Menjelaskan Komponen]}:
+    \begin{itemize}
+        \item "Jika diibaratkan anatomi hewan atau manusia: Backbone adalah mata dan reseptor sensorik yang mengamati tekstur; Neck adalah jaringan saraf pengumpul informasi; dan Head adalah otak yang memutuskan 'Itu Ceratium furca dengan koordinat x,y di lapang pandang'."
+        \item "Desain modular ini sangat efisien dan telah dibuktikan di berbagai bidang mikroskopi medis maupun sitologi sel."
+    \end{itemize}
+}
+
+% ------------------------------------------------------------------------------
+% SLIDE 9: FLOWCHART 2 - ANATOMI INTERNAL YOLO (TIKZ)
+% ------------------------------------------------------------------------------
+\begin{frame}{Diagram Arsitektur Komputasi YOLO}
+    \framesubtitle{Mekanisme Ekstraksi Ciri Morfologi Fitoplankton secara Multiskala}
+    
+    \centering
+    \begin{tikzpicture}[
+        node distance=0.55cm and 0.55cm,
+        every node/.style={font=\tiny},
+        block/.style={rectangle, rounded corners=2pt, draw=OceanDeep, fill=CardBg, thick, minimum height=0.9cm, text width=2.1cm, align=center, drop shadow},
+        bbnode/.style={rectangle, rounded corners=2pt, draw=OceanTeal, fill=OceanTeal!10, thick, minimum height=0.9cm, text width=2.2cm, align=center, drop shadow},
+        necknode/.style={rectangle, rounded corners=2pt, draw=CyanHighlight, fill=CyanHighlight!15, thick, minimum height=0.9cm, text width=2.2cm, align=center, drop shadow},
+        headnode/.style={rectangle, rounded corners=2pt, draw=CoralAccent, fill=CoralAccent!15, thick, minimum height=0.9cm, text width=2.3cm, align=center, drop shadow},
+        arrow/.style={-Stealth[length=2.5mm, width=1.5mm], thick, OceanDeep}
+    ]
+        % Node Input
+        \node[block] (input) {\textbf{Input Citra}\\[1pt]Lapang Pandang Mikroskop ($1024 \times 1024$)};
+        
+        % Backbone
+        \node[bbnode, right=of input] (bb1) {\textbf{Backbone Layer Rendah}\\Deteksi Tepi Silika \& Setae Halus};
+        \node[bbnode, right=of bb1] (bb2) {\textbf{Backbone Layer Dalam}\\Fitur Bentuk Utuh \& Morfologi Khas};
+        
+        % Neck
+        \node[necknode, below=of bb2] (neck) {\textbf{Feature Pyramid Neck}\\Penyatuan Skala Mikro \& Koloni Raksasa};
+        
+        % Head
+        \node[headnode, left=of neck] (head) {\textbf{Prediction Head}\\Regresi Kotak \& Klasifikasi 24 Taksa};
+        
+        % Output
+        \node[block, draw=AlgaeGreen, fill=AlgaeGreen!15, left=of head] (output) {\textbf{Hasil Akhir}\\[1pt]Kotak Terlabel + Nilai Kepercayaan + Jumlah Sensus};
+        
+        % Panah Koneksi
+        \draw[arrow] (input) -- (bb1);
+        \draw[arrow] (bb1) -- (bb2);
+        \draw[arrow] (bb2) -- (neck);
+        \draw[arrow] (neck) -- (head);
+        \draw[arrow] (head) -- (output);
+        
+        % Garis Skip Connection FPN (Menghubungkan layer awal ke neck)
+        \draw[arrow, dashed, draw=CyanHighlight] (bb1.south) to [out=270, in=180] (neck.west);
+    \end{tikzpicture}
+    
+    \vspace{4pt}
+    \begin{tcolorbox}[colback=white, colframe=CyanHighlight, arc=3pt, boxrule=0.6pt, left=6pt, right=6pt, top=3pt, bottom=3pt]
+        \scriptsize\textbf{\color{OceanTeal}Pentingnya Garis Putus-putus (*Skip Connection / Feature Pyramid*):}\\
+        Garis ini mengalirkan informasi detail resolusi tinggi dari lapisan awal langsung ke lapisan akhir. Inilah kunci mengapa duri rambut halus fitoplankton (*Chaetoceros*) atau sel kerdil (*Detonula pumila*) tetap terdeteksi dan tidak kabur saat melewati jaringan saraf dalam.
+    \end{tcolorbox}
+\end{frame}
+
+\note{
+    \textbf{[Catatan Presenter - Poin Teknis Kunci]}:
+    \begin{itemize}
+        \item "Prof, jika ada yang bertanya: 'Apakah jaringan saraf tidak akan menghilangkan bagian tubuh fitoplankton yang sangat halus seperti rambut/setae duri Chaetoceros?'"
+        \item "Jawabannya ada pada Feature Pyramid Neck (garis putus-putus). Model tidak membuang resolusi tinggi di awal, melainkan menggabungkan informasi detail halus dengan pemahaman bentuk global sel."
+        \item "Inilah mengapa YOLO sangat unggul dalam mendeteksi fitoplankton berukuran kontras, dari diatom bulat kecil hingga dinoflagellata bertanduk panjang."
+    \end{itemize}
+}
+
+% ------------------------------------------------------------------------------
+% SLIDE 10: CIRI MORFOLOGI 24 TAKSA DALAM DATASET
+% ------------------------------------------------------------------------------
+\begin{frame}{Spesifisitas Taksonomi: 24 Kelas Fitoplankton}
+    \framesubtitle{Karakter Diagnostik Morfologis yang Dipelajari oleh Model YOLO}
+    
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{biocard}{Kelompok Diatom (Bacillariophyceae)}
+                \scriptsize
+                \begin{itemize}\setlength\itemsep{2pt}
+                    \item \textbf{Sentrik Soliter/Diskus}: *Coscinodiscus* (katup bulat besar), *Coscinodiscus flank* (posisi tampak samping/gelang katup).
+                    \item \textbf{Sentrik Berduri/Rantai}: *Chaetoceros* (setae panjang silika), *Bacteriastrum* (setae melingkar simetris), *Skeletonema* (silinder kecil bersambung untaian filamen), *Corethron*, *Biddulphia*, *Ditylum*.
+                    \item \textbf{Pennat Simetris/Asimetris}: *Navicula* (berbentuk perahu/lancet), *Pleurosigma pelagicum* (bentuk sigmoid membengkok khas dengan pola garis halus).
+                    \item \textbf{Pennat Kolonial}: *Thalassionema frauenfeldii* (koloni bintang/kipas), *Thalassionema nitzschioides* (zigzag).
+                \end{itemize}
+            \end{biocard}
+        \end{column}
+        
+        \begin{column}{0.48\textwidth}
+            \begin{conceptcard}{Kelompok Dinoflagellata (Dinophyceae)}
+                \scriptsize
+                \begin{itemize}\setlength\itemsep{2pt}
+                    \item \textbf{Genus *Ceratium* (Diferensiasi Tanduk)}:
+                        \begin{itemize}\scriptsize
+                            \item *C. furca*: Tanduk antapikal lurus tak sama panjang.
+                            \item *C. fusus*: Tubuh ramping spindel memanjang.
+                            \item *C. tripos*: 2 tanduk bawah melengkung ke atas.
+                            \item *C. trichoceros*: Tanduk sangat panjang melengkung tipis.
+                            \item *C. carriense*: Tanduk melebar horizontal.
+                        \end{itemize}
+                    \item \textbf{Taksa Spesifik Lainnya}:
+                        \begin{itemize}\scriptsize
+                            \item *Dinophysis caudata*: Alga beracun (DSP) dengan sayap sulkus khas di tepi sel.
+                            \item *Protoperidinium*: Cangkang teka bulat/pyriform.
+                        \end{itemize}
+                \end{itemize}
+            \end{conceptcard}
+        \end{column}
+    \end{columns}
+    \vspace{2pt}
+    \scriptsize\textit{*Total Dataset: 11.089 citra mikroskopik, 13.817 bounding boxes teranotasi kuratif.}
+\end{frame}
+
+\note{
+    \textbf{[Catatan Presenter - Bukti Relevansi Biologi]}:
+    \begin{itemize}
+        \item "Slide ini membuktikan bahwa kita tidak memperlakukan alga sebagai kotak hitam sembarangan. Kita mengajari model berdasarkan kunci identifikasi morfologis taksonomi laut."
+        \item "Contoh nyata: genus Ceratium memiliki 5 spesies berbeda dalam dataset kita. Model dilatih mengenali kurvatur dan jumlah tanduk apikal/antapikal persis seperti yang dilakukan biolog."
+        \item "Diferensiasi Dinophysis caudata juga sangat esensial karena spesies ini adalah agen penyebab Diarrhetic Shellfish Poisoning (DSP)."
+    \end{itemize}
+}
+
+% ------------------------------------------------------------------------------
+% SLIDE 11: PROSES TRAINING & LOSS FUNCTION
+% ------------------------------------------------------------------------------
+\begin{frame}{Bagaimana Model Ini "Belajar"? (Proses Training)}
+    \framesubtitle{Analogi Bimbingan Mahasiswa Baru oleh Dosen Taksonom Senior}
+    
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{conceptcard}{Analogi Proses Pembelajaran (*Training*)}
+                \scriptsize
+                \begin{enumerate}\setlength\itemsep{3pt}
+                    \item \textbf{Kondisi Awal (Epoch 1)}: Model belum tahu apa-apa. Ia menebak secara acak, sering salah mengira gelembung udara sebagai *Coscinodiscus*.
+                    \item \textbf{Pemberian Koreksi (*Loss Function*)}: Dosen (data acuan biolog) mengukur selisih kesalahan:
+                        \begin{itemize}\scriptsize
+                            \item \textit{Box Loss}: "Kotakmu meleset 15 piksel ke kiri!"
+                            \item \textit{Class Loss}: "Itu bukan *C. furca*, tapi *C. fusus*!"
+                        \end{itemize}
+                    \item \textbf{Penyesuaian Internal (*Backpropagation*)}: Model mengoreksi jutaan bobot matematis di dalam simpul sarafnya.
+                    \item \textbf{Konvergensi}: Setelah diulang puluhan putaran (*epochs*), tingkat kesalahan mendekati nol dan model menjadi mahir.
+                \end{enumerate}
+            \end{conceptcard}
+        \end{column}
+        
+        \begin{column}{0.46\textwidth}
+            \begin{biocard}{Tiga Komponen Fungsi Galat (*Total Loss*)}
+                \scriptsize
+                $$\mathcal{L}_{\text{total}} = \lambda_1 \mathcal{L}_{\text{box}} + \lambda_2 \mathcal{L}_{\text{cls}} + \lambda_3 \mathcal{L}_{\text{dfl}}$$
+                \begin{itemize}\setlength\itemsep{2pt}
+                    \item $\mathcal{L}_{\text{box}}$: Keakuratan posisi koordinat batas sel (menghindari sel terpotong).
+                    \item $\mathcal{L}_{\text{cls}}$: Keakuratan penetapan nama spesies (mencegah salah takson).
+                    \item $\mathcal{L}_{\text{dfl}}$: Kehalusan tepi dinding sel yang kabur (*fuzzy boundary*).
+                \end{itemize}
+                \tcblower
+                \textbf{\color{OceanTeal}Jaminan Ilmiah:}\\
+                Model tidak menghafal gambar, melainkan menemukan aturan umum morfologi yang berlaku pada sampel baru yang belum pernah dilihat sebelumnya.
+            \end{biocard}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\note{
+    \textbf{[Catatan Presenter - Menjelaskan Persamaan Matematis dengan Santun]}:
+    \begin{itemize}
+        \item "Prof, rumus matematis di kanan atas sebenarnya memiliki arti sederhana: Total Kesalahan adalah penjumlahan dari 'Salah Lokasi Kotak' ditambah 'Salah Sebut Nama Spesies'."
+        \item "Setiap kali model salah menduga, sistem memberikan penalti numerik. Selama proses pelatihan (training), sistem berusaha mengecilkan penalti tersebut hingga model mampu mengenali sel dengan akurasi di atas 90\%."
+    \end{itemize}
+}
+
+% ------------------------------------------------------------------------------
+% SLIDE 12: MEMAHAMI METRIK EVALUASI (BAHASA BIOLOGI)
+% ------------------------------------------------------------------------------
+\begin{frame}{Menerjemahkan Metrik AI ke Bahasa Biologi}
+    \framesubtitle{Apakah Model Cukup Akurat dan Layak Dipakai untuk Data Publikasi Internasional?}
+    
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{conceptcard}{Presisi (Precision) = Kemurnian Takson}
+                \scriptsize
+                \textbf{Definisi Biologis}:\\
+                \textit{"Jika model menyatakan ada 100 sel Dinophysis, berapa persen yang benar-benar Dinophysis asli dan bukan kotoran/spesies lain?"}\\[4pt]
+                $$\text{Precision} = \frac{\text{True Positive}}{\text{True Positive} + \text{False Positive}}$$
+                \textbf{Pentingnya}: Menghindari \textit{False Alarm} pada peringatan toksin alga mekar (HABs).
+            \end{conceptcard}
+        \end{column}
+        
+        \begin{column}{0.48\textwidth}
+            \begin{biocard}{Sensitivitas (Recall) = Kelengkapan Sensus}
+                \scriptsize
+                \textbf{Definisi Biologis}:\\
+                \textit{"Dari 100 sel Chaetoceros yang riil ada di bawah mikroskop, berapa banyak yang berhasil ditemukan oleh model tanpa terlewat?"}\\[4pt]
+                $$\text{Recall} = \frac{\text{True Positive}}{\text{True Positive} + \text{False Negative}}$$
+                \textbf{Pentingnya}: Mencegah perkiraan rendah (*underestimation*) kelimpahan populasi dan biomassa.
+            \end{biocard}
+        \end{column}
+    \end{columns}
+    
+    \vspace{4pt}
+    \begin{alertcard}{mAP (mean Average Precision) = Indeks Mutu Komposit Global}
+        \scriptsize
+        Rata-rata terbobot nilai Presisi dan Recall pada seluruh rentang sensitivitas untuk \textbf{ke-24 spesies fitoplankton}. Nilai mAP di atas 0.80--0.90 menunjukkan tingkat keandalan setara dengan analis mikroskopi manusia berpengalaman.
+    \end{alertcard}
+\end{frame}
+
+\note{
+    \textbf{[Catatan Presenter - Metrik Validasi]}:
+    \begin{itemize}
+        \item "Ketika kita menulis artikel jurnal nanti, reviewer biologi pasti bertanya: 'Bagaimana akurasinya?'"
+        \item "Kita tidak hanya menjawab dengan persentase umum, melainkan dengan dua tolok ukur ketat: Presisi (kemurnian hasil, tidak ada debu yang dikira sel) dan Recall (kelengkapan hitung, tidak ada sel yang terlewat)."
+        \item "Kedua nilai ini disatukan dalam skor mAP yang menjadi standar baku pengujian internasional."
+    \end{itemize}
+}
+
+% ------------------------------------------------------------------------------
+% SLIDE 13: MENJAWAB KERAGUAN PROMOTOR (FAQ KRITIS)
+% ------------------------------------------------------------------------------
+\begin{frame}{Menjawab Keraguan Ilmiah (FAQ Promotor)}
+    \framesubtitle{Kekhawatiran Umum Biolog terhadap Sistem Otomasi Berbasis AI}
+    
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{alertcard}{T1: "Bagaimana jika ada detritus / kotoran organik?"}
+                \scriptsize
+                \textbf{Jawaban Saintifik}:\\
+                Model dilatih dengan kelas *Background* yang mencakup partikel sedimen, serpihan organik, dan gelembung udara. Partikel non-alga yang tidak memiliki struktur morfologi berpola akan diabaikan secara otomatis karena skor kepercayaannya berada di bawah ambang batas (*threshold* $< 0.4$).
+            \end{alertcard}
+            \vspace{3pt}
+            \begin{alertcard}{T2: "Bagaimana jika sel saling bertumpuk (overlap)?"}
+                \scriptsize
+                \textbf{Jawaban Saintifik}:\\
+                YOLO memprediksi bounding box multi-layer. Dua sel yang saling bersilangan (misal: dua rantai *Chaetoceros*) tetap diberi 2 kotak terpisah yang independen, mencatat koordinat masing-masing pusat sel.
+            \end{alertcard}
+        \end{column}
+        
+        \begin{column}{0.48\textwidth}
+            \begin{conceptcard}{T3: "Bagaimana jika sel patah atau mati (frustule kosong)?"}
+                \scriptsize
+                \textbf{Jawaban Saintifik}:\\
+                Pada dataset latih, kita memasukkan variasi spesimen utuh dan patah. Jika tujuan riset membedakan sel hidup vs cangkang mati, model dapat ditambahkan kelas khusus (*frustule intact* vs *empty shell*) melalui anotasi terarah.
+            \end{conceptcard}
+            \vspace{3pt}
+            \begin{biocard}{T4: "Apakah AI ini berhalusinasi spesies aneh?"}
+                \scriptsize
+                \textbf{Jawaban Saintifik}:\\
+                Tidak. Berbeda dengan AI teks (seperti ChatGPT yang bisa mengarang), YOLO adalah model *deterministik diskriminatif tertutup*. Ia hanya memilih probabilitas dari 24 kelas yang telah divalidasi oleh taksonom.
+            \end{biocard}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\note{
+    \textbf{[Catatan Presenter - Sangat Penting untuk Mengatasi Keraguan]}:
+    \begin{itemize}
+        \item "Slide ini adalah pertahanan utama jika promotor bersikap skeptis terhadap keandalan AI."
+        \item "Tegaskan poin T4: Tekankan bahwa YOLO bukan LLM/chat model yang bisa berhalusinasi atau mengarang cerita fiktif. YOLO adalah model pengenal pola geometris diskriminatif. Jika ada objek aneh di luar 24 taksa yang kita ajarkan, model akan melabelinya sebagai background tak dikenal, bukan mengarang takson baru."
+    \end{itemize}
+}
+
+% ------------------------------------------------------------------------------
+% SLIDE 14: KONTRIBUSI DOKTORAL & KEBARUAN ILMIAH
+% ------------------------------------------------------------------------------
+\begin{frame}{Nilai Kebaruan \& Relevansi Disertasi Biologi}
+    \framesubtitle{Mengapa Penerapan YOLO Bukan Sekadar Pekerjaan Teknis, Melainkan Riset Doktoral?}
+    
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{biocard}{Bukan Sekadar Menjalankan Kode (Software)}
+                \scriptsize
+                \textbf{Tiga Pilar Ilmiah yang Kita Bangun}:
+                \begin{enumerate}\setlength\itemsep{3pt}
+                    \item \textbf{Standarisasi Basis Data Morfologi}: Membangun dataset kuratif 24 taksa fitoplankton perairan tropis yang belum pernah dipublikasikan secara komprehensif.
+                    \item \textbf{Validasi Ekologis Nyata}: Membandingkan secara statistik hasil sensus AI dengan sensus manual kamar hitung (*Ground-Truthing Paired t-Test* / Koefisien Korelasi Pearson $r > 0.95$).
+                    \item \textbf{Eksplorasi Fenomena Dinamika Ekologi}: Mampu menganalisis ratusan sampel temporal untuk melihat respon suksesi komunitas fitoplankton terhadap fluktuasi monsun dan masukan nutrien.
+                \end{enumerate}
+            \end{biocard}
+        \end{column}
+        
+        \begin{column}{0.48\textwidth}
+            \begin{conceptcard}{Target Luaran Akademik Berkualitas}
+                \scriptsize
+                \begin{itemize}\setlength\itemsep{4pt}
+                    \item \textbf{Publikasi Jurnal Bereputasi Tinggi}:
+                        \begin{itemize}\scriptsize
+                            \item *Ecological Informatics* (Elsevier, Q1)
+                            \item *Harmful Algae* (Elsevier, Q1)
+                            \item *Journal of Plankton Research* (Oxford, Q1/Q2)
+                        \end{itemize}
+                    \item \textbf{Aplikasi Praktis}: Protokol standar otomasi pemantauan mutu perairan dan peringatan dini HABs bagi instansi kelautan \& perikanan.
+                    \item \textbf{Disertasi Komprehensif}: Menghubungkan biologi taksonomi klasik dengan metode kuantitatif era modern.
+                \end{itemize}
+            \end{conceptcard}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\note{
+    \textbf{[Catatan Presenter - Justifikasi Akademik Tingkat Doktor]}:
+    \begin{itemize}
+        \item "Prof, sering ada pertanyaan: 'Apakah ini layak untuk gelar Doktor Biologi atau ini lebih condong ke Ilmu Komputer?'"
+        \item "Kita tegaskan: Koding adalah alat, tapi pertanyaan saintifiknya 100\% biologi. Nilai doktoralnya terletak pada: bagaimana instrumen ini memecahkan kebuntuan kuantifikasi ekologi laut yang selama 50 tahun terakhir selalu terhambat oleh lambatnya sensus manual."
+        \item "Data yang kita peroleh memungkinkan pemodelan niche ekologis dan dinamika rantai makanan laut pada resolusi yang belum pernah dicapai peneliti sebelumnya."
+    \end{itemize}
+}
+
+% ------------------------------------------------------------------------------
+% SLIDE 15: KESIMPULAN & TAHAPAN SELANJUTNYA
+% ------------------------------------------------------------------------------
+\begin{frame}{Kesimpulan \& Rencana Langkah Berikutnya}
+    \framesubtitle{Sintesis Konseptual untuk Mendukung Kemajuan Penelitian Doktoral}
+    
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{biocard}{Rangkuman Inti untuk Promotor}
+                \scriptsize
+                \begin{itemize}\setlength\itemsep{3pt}
+                    \item \textbf{YOLO adalah Mikroskop Cerdas}: Membantu sensus cacah dan taksonomi fitoplankton secara instan tanpa subjektivitas kelelahan mata.
+                    \item \textbf{Berbasis Morfologi Nyata}: Model belajar mengenali karakter silika katup, duri setae, dan tanduk khas dari 24 taksa fitoplankton.
+                    \item \textbf{Validasi Ketat Terukur}: Menggunakan metrik saintifik baku (Precision, Recall, mAP) untuk menjamin kemurnian data publikasi.
+                \end{itemize}
+            \end{biocard}
+        \end{column}
+        
+        \begin{column}{0.48\textwidth}
+            \begin{conceptcard}{Tahapan Eksekusi Mendatang}
+                \scriptsize
+                \begin{enumerate}\setlength\itemsep{3pt}
+                    \item \textbf{Penyempurnaan Anotasi}: Review bersama tim taksonomi untuk kelas yang sulit (*Coscinodiscus flank* vs *diskus*).
+                    \item \textbf{Pelatihan Model Berakurasi Penuh}: Menjalankan training GPU di platform Kaggle / Cloud Cluster.
+                    \item \textbf{Uji Buta Sampel Lapangan}: Menguji model pada sampel air laut baru yang diambil pada musim monsun berbeda.
+                    \item \textbf{Penyusunan Draft Manuskrip}: Mengintegrasikan data kelimpahan otomatis ke dalam analisis ekologi.
+                \end{enumerate}
+            \end{conceptcard}
+        \end{column}
+    \end{columns}
+    
+    \vspace{6pt}
+    \centering
+    \scriptsize\color{OceanDeep}\textbf{Terima kasih atas bimbingan dan arahan Prof serta Tim Promotor.}\\[1mm]
+    \footnotesize\color{MutedText}\textit{Sesi Diskusi \& Tanya Jawab Metodologis}
+\end{frame}
+
+\note{
+    \textbf{[Catatan Penutup untuk Disampaikan ke Promotor]}:
+    \begin{itemize}
+        \item "Demikian paparan konseptual mengenai penggunaan YOLO dalam riset disertasi saya, Prof."
+        \item "Saya sangat mengharapkan masukan dari Prof khususnya terkait: apakah ada taksa fitoplankton tertentu dari 24 taksa ini yang perlu kita beri perhatian khusus atau kita validasi ulang karakter diagnostiknya bersama tim taksonomi."
+        \item "Terima kasih banyak atas waktu dan arahan berharga dari Prof."
+    \end{itemize}
+}
+
+\end{document}
