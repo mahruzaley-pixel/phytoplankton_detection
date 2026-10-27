@@ -32,10 +32,11 @@ env/
 ENV/
 
 # Datasets and generated YOLO data (DO NOT PUSH LARGE DATASETS TO GITHUB)
-dataset/
-sub_dataset/
-data/
-yolo_dataset/
+/dataset/
+/sub_dataset/
+/data/
+/yolo_dataset/
+!src/data/
 *.zip
 *.tar.gz
 
