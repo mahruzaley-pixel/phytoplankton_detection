@@ -64,17 +64,20 @@ def find_classes_config(dataset_dir: Path) -> Path:
     return Path("configs/classes.yaml")
 
 
-def package_results(output_zip: Path, result_dir: Path, extra_files: list):
-    """Mengompresi hasil pelatihan ke ZIP secara cross-platform menggunakan Python zipfile."""
+def package_results(output_zip: Path, runs_dir: Path, extra_files: list):
+    """Mengompresi seluruh isi folder runs (train, val, predict) ke ZIP secara cross-platform."""
     output_zip.parent.mkdir(parents=True, exist_ok=True)
-    print(f"\n[EXPORT] Mengompresi hasil eksperimen ke: {output_zip}...")
+    print(f"\n[EXPORT] Mengompresi seluruh folder runs ke: {output_zip}...")
     with zipfile.ZipFile(output_zip, "w", zipfile.ZIP_DEFLATED) as zipf:
-        if result_dir.exists():
-            for root, _, files in os.walk(result_dir):
+        if runs_dir.exists():
+            for root, _, files in os.walk(runs_dir):
                 for f in files:
                     full_p = Path(root) / f
-                    rel_p = full_p.relative_to(result_dir.parent)
-                    zipf.write(full_p, arcname=str(rel_p))
+                    # Hindari file zip itu sendiri
+                    if full_p.suffix == ".zip":
+                        continue
+                    rel_p = full_p.relative_to(runs_dir)
+                    zipf.write(full_p, arcname=str(Path("runs") / rel_p))
         for extra in extra_files:
             extra_p = Path(extra)
             if extra_p.exists():
@@ -220,12 +223,9 @@ def main():
     else:
         export_zip = Path("runs/yolo26_results.zip")
 
-    exp_dirs = [p for p in Path("runs").rglob(exp_name) if p.is_dir() and (p / "weights").exists()]
-    actual_exp_dir = exp_dirs[0] if exp_dirs else Path(f"runs/train/{exp_name}")
-
     package_results(
         output_zip=export_zip,
-        result_dir=actual_exp_dir,
+        runs_dir=Path("runs"),
         extra_files=[str(yolo_data_yaml), str(classes_config)],
     )
 
